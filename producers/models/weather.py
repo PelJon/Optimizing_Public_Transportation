@@ -35,13 +35,12 @@ class Weather(Producer):
         # Complete the below by deciding on a topic name, number of partitions, and number of
         # replicas
         #
-        topic_name = f"com.udacity.chicagotransit.weather"
         super().__init__(
-            topic_name, #Come up with a better topic name
+            "org.chicago.cta.weather", #Come up with a better topic name
             key_schema=Weather.key_schema,
             value_schema=Weather.value_schema,
-            num_partitions=4,
-            num_replicas=2,
+            num_partitions=1,
+            num_replicas=1
         )
 
         self.status = Weather.status.sunny
@@ -101,7 +100,9 @@ class Weather(Producer):
                 }
             ),
         )
+        logger.info("Weather message successfully run")
         resp.raise_for_status()
+
 
         logger.debug(
             "sent weather data to kafka, temp: %s, status: %s",
