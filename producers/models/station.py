@@ -36,13 +36,12 @@ class Station(Producer):
         # Complete the below by deciding on a topic name, number of partitions, and number of replicas
         #
         #
-        topic_name = f"com.udacity.chicagotransit.station_arrivals" # Come up with a better topic name
         super().__init__(
-            topic_name,
+            "org.chicago.cta.stations.arrivals",
             key_schema=Station.key_schema,
             value_schema=Station.value_schema, # Uncomment once schema is defined
-            num_partitions=4,
-            num_replicas=2,
+            num_partitions=1,
+            num_replicas=1
         )
 
         self.station_id = int(station_id)
@@ -67,12 +66,15 @@ class Station(Producer):
                 "station_id": self.station_id,
                 "train_id": train.train_id,
                 "direction": direction,
-                "line": self.color,
+                "line": self.color.name,
                 "train_status": train.status.name,
                 "prev_station_id": prev_station_id,
                 "prev_direction": prev_direction
             },
         )
+        logger.info("Arrival message successfully run")
+        
+        
 
     def __str__(self):
         return "Station | {:^5} | {:<30} | Direction A: | {:^5} | departing to {:<30} | Direction B: | {:^5} | departing to {:<30} | ".format(
