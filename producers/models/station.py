@@ -57,17 +57,21 @@ class Station(Producer):
         """Simulates train arrivals at this station"""
         #
         # Complete this function by producing an arrival message to Kafka
-        #
-        #logger.info("arrival kafka integration incomplete - skipping")
+        
+        if prev_direction:
+            prev_direction = str(prev_direction)
+        if  prev_station_id:
+            prev_station_id = int(prev_station_id)
+        
         self.producer.produce(
             topic=self.topic_name,
             key={"timestamp": self.time_millis()},
             value={
-                "station_id": self.station_id,
+                "station_id": int(self.station_id),
                 "train_id": train.train_id,
                 "direction": direction,
-                "line": self.color.name,
-                "train_status": train.status.name,
+                "line": str(self.color.name),
+                "train_status": str(train.status.name),
                 "prev_station_id": prev_station_id,
                 "prev_direction": prev_direction
             },
