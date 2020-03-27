@@ -24,8 +24,8 @@ class Producer:
         topic_name,
         key_schema,
         value_schema=None,
-        num_partitions=4,
-        num_replicas=2,
+        num_partitions=1,
+        num_replicas=1,
     ):
         """Initializes a Producer object with basic settings"""
         self.topic_name = topic_name
@@ -67,9 +67,9 @@ class Producer:
             logger.info(f"{self.topic_name} not created")
             return
         
-        client = AdminClient({'bootstrap.servers':  BROKER_URL})
+        self.client = AdminClient({'bootstrap.servers':  BROKER_URL})
 
-        futures = client.create_topics(
+        futures = self.client.create_topics(
             [NewTopic(
                 topic=self.topic_name,
                 replication_factor=self.num_replicas,
